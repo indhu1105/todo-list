@@ -1,13 +1,14 @@
 <h2>Todo List</h2>
 <form >
-    <input [(ngModel)]="tasktitle" type="text" placeholder="TaskTitle" name="tasktitle">
-   <button type="button" (click)="prior(i)">High Priority
-</button>
-    <button type="button" (click)="add(tasktitle)">Add</button>
+    
+    <input  [(ngModel)]="tasktitle" type="text" placeholder="TaskTitle" name="tasktitle"  required>
+   <input [(ngModel)]="prior"  type="checkbox" name="prior">High priority
+    <button type="submit" (click)="add()">Add</button>
 </form>
+
 <button type="button" (click)="clearAll()">Clear All</button>
 <button type="button" (click)="clearMarked()">Clear Completed item</button>
-<ul class="refer"  *ngFor="let task of todoList;let i = index">
-    <li> <input class="check"type="checkbox" (change)="markAsComplete(i)">
-        <span id="demo" ></span> {{task}}<button type="button" (click)="remove(i)">Delete</button> </li>
+<ul class="refer"  *ngFor="let task of todo;let i = index">
+    <li> <input type="checkbox" (change)="markAsComplete(i)" >
+        <span *ngIf="task.priority">&uarr;</span> {{task.todoList}}<button type="button" (click)="remove(i)">Delete</button> </li>
 </ul>

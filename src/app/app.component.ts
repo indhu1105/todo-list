@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, SystemJsNgModuleLoader } from '@angular/core';
 import { CompileTemplateMetadata } from '@angular/compiler';
 import { Key } from 'protractor';
 
@@ -9,32 +9,38 @@ import { Key } from 'protractor';
 })
 
 export class AppComponent {
-  todoList:Array<string>=[];
-  completeList:Array<boolean>=[];
-  priority:Array<string>=[];
+  todo:Array<any>=[];
+  todoList:string
+ completeList:boolean
+ priority:boolean
    key1='todo'
-    key2='complete'
     tasktitle='';
-    
-  
- 
-   add(tasktitle) {
+    prior:boolean
+    temp:string
+    len=this.todo.length;
+    constructor()
+    {
+ this.todo=JSON.parse(localStorage.getItem(this.key1));
+    }
+   add() {
      console.log("hii");
-     this.todoList.push(tasktitle);
-     this.completeList.push(false);
-     this.priority.push('0');
-     this.clearTaskTitle(tasktitle);
+     this.todo.push(
+       {todoList:this.tasktitle,
+        completeList:false,
+        priority:this.prior
+      });
+     this.clearTaskTitle(this.tasktitle);
+     this.prior=false;
     this.reuse();
   }
   markAsComplete(i)
   {
-    this.completeList[i]=!this.completeList[i];
+    this.todo[i].completeList=! this.todo[i].completeList[i];
     this.reuse();
   }
   remove(i)
   {
-    this.todoList.splice(i,1);
-    this.completeList.splice(i,1);
+    this.todo.splice(i,1);
     this.reuse();
   }
 clearTaskTitle(tasktitle)
@@ -43,39 +49,27 @@ this.tasktitle=" ";
 }
   reuse()
   {
-    localStorage.setItem(this.key1,JSON.stringify(this.todoList));
-    localStorage.setItem(this.key2,JSON.stringify(this.completeList));
+    localStorage.setItem(this.key1,JSON.stringify(this.todo));
   }
   clearAll()
   {
-    this.todoList.splice(0,this.todoList.length);
-    this.completeList.splice(0,this.completeList.length);
+    this.todo.splice(0,this.todo.length);
+    localStorage.removeItem(JSON.stringify(this.todo));
     this.reuse();
   }
   clearMarked()
   {
-    for(let i=0;i<this.completeList.length;i++)
+    for(let i=0;i<this.todo.length;i++)
     {
-    if(this.completeList[i]==true)
+    if(this.todo[i].completeList==true)
     {
-         this.todoList.splice(i,1);
-         this.completeList.splice(i,1);
+      this.todo.splice(i,1);
          this.reuse();
          i--;
     } 
     }
   }
-  prior(i)
-  {
-    this.priority[i]='1';
-
-    if(this.priority[i]=='1')
-    {
-      let ele=document.getElementById("demo");
-     this.priority[i]='&uarr';
-    }
-    console.log(this.priority[i]);
-  }
-
+  
+ 
   
 }
